@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Data_structure1\\Data_Structure\\report2_2\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0AC15D8B-9F17-4F87-9047-A79882A6A087}|report2_2\\report2_2.vcxproj|D:\\Data_structure1\\Data_Structure\\report2_2\\report2_2\\report.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{0AC15D8B-9F17-4F87-9047-A79882A6A087}|report2_2\\report2_2.vcxproj|solutionrelative:report2_2\\report.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "report.c",
+              "DocumentMoniker": "D:\\Data_structure1\\Data_Structure\\report2_2\\report2_2\\report.c",
+              "RelativeDocumentMoniker": "report2_2\\report.c",
+              "ToolTip": "D:\\Data_structure1\\Data_Structure\\report2_2\\report2_2\\report.c*",
+              "RelativeToolTip": "report2_2\\report.c*",
+              "ViewState": "AgIAAKoAAAAAAAAAAAAUwMYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-10T06:27:28.8Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
