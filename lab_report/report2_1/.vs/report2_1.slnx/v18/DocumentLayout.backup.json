@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Data_structure1\\Data_Structure\\report2_1\\",
+  "WorkspaceRootPath": "D:\\Data_structure1\\Data_Structure\\lab_report\\report2_1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{65E27B69-21DB-4873-B18A-3694B6B3A518}|report2_1\\report2_1.vcxproj|D:\\Data_structure1\\Data_Structure\\report2_1\\report2_1\\report.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{65E27B69-21DB-4873-B18A-3694B6B3A518}|report2_1\\report2_1.vcxproj|D:\\Data_structure1\\Data_Structure\\lab_report\\report2_1\\report2_1\\report.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{65E27B69-21DB-4873-B18A-3694B6B3A518}|report2_1\\report2_1.vcxproj|solutionrelative:report2_1\\report.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -20,9 +20,9 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "report.c",
-              "DocumentMoniker": "D:\\Data_structure1\\Data_Structure\\report2_1\\report2_1\\report.c",
+              "DocumentMoniker": "D:\\Data_structure1\\Data_Structure\\lab_report\\report2_1\\report2_1\\report.c",
               "RelativeDocumentMoniker": "report2_1\\report.c",
-              "ToolTip": "D:\\Data_structure1\\Data_Structure\\report2_1\\report2_1\\report.c",
+              "ToolTip": "D:\\Data_structure1\\Data_Structure\\lab_report\\report2_1\\report2_1\\report.c",
               "RelativeToolTip": "report2_1\\report.c",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
