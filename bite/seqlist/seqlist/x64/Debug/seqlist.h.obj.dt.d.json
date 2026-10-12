@@ -1,0 +1,26 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\data_structure1\\data_structure\\bite\\seqlist\\seqlist\\seqlist.h",
+        "ProvidedModule": "",
+        "Includes": [
+            "f:\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\stdio.h",
+            "f:\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\corecrt.h",
+            "f:\\program files\\microsoft visual studio\\18\\community\\vc\\tools\\msvc\\14.51.36231\\include\\vcruntime.h",
+            "f:\\program files\\microsoft visual studio\\18\\community\\vc\\tools\\msvc\\14.51.36231\\include\\sal.h",
+            "f:\\program files\\microsoft visual studio\\18\\community\\vc\\tools\\msvc\\14.51.36231\\include\\concurrencysal.h",
+            "f:\\program files\\microsoft visual studio\\18\\community\\vc\\tools\\msvc\\14.51.36231\\include\\vadefs.h",
+            "f:\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\corecrt_wstdio.h",
+            "f:\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\corecrt_stdio_config.h",
+            "f:\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\stdlib.h",
+            "f:\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\corecrt_malloc.h",
+            "f:\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\corecrt_search.h",
+            "f:\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\stddef.h",
+            "f:\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\corecrt_wstdlib.h",
+            "f:\\program files\\microsoft visual studio\\18\\community\\vc\\tools\\msvc\\14.51.36231\\include\\limits.h",
+            "f:\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\assert.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
