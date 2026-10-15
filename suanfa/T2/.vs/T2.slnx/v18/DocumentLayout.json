@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Data_structure1\\Data_Structure\\xiti1\\suanfa\\suanfa\\T2\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F8AD7474-505B-4287-BE51-CC64FB23C251}|T2\\T2.vcxproj|D:\\Data_structure1\\Data_Structure\\xiti1\\suanfa\\suanfa\\T2\\T2\\jiefa2.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{F8AD7474-505B-4287-BE51-CC64FB23C251}|T2\\T2.vcxproj|solutionrelative:T2\\jiefa2.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "jiefa2.c",
+              "DocumentMoniker": "D:\\Data_structure1\\Data_Structure\\xiti1\\suanfa\\suanfa\\T2\\T2\\jiefa2.c",
+              "RelativeDocumentMoniker": "T2\\jiefa2.c",
+              "ToolTip": "D:\\Data_structure1\\Data_Structure\\xiti1\\suanfa\\suanfa\\T2\\T2\\jiefa2.c",
+              "RelativeToolTip": "T2\\jiefa2.c",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGsAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-15T15:17:46.751Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

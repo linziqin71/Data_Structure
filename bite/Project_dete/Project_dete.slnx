@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Project_dete/Project_dete.vcxproj" Id="48c61496-7e11-4601-bc33-d6728041ebb2" />
+</Solution>
