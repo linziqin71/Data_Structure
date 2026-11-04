@@ -5,6 +5,7 @@
 #include <string.h>
 
 #define MAXN 100
+#define MAXCODE (2 * MAXN)
 
 // 哈夫曼树结点
 typedef struct {
@@ -15,13 +16,16 @@ typedef struct {
     int right;
 } HTNode;
 
+// 全局变量
 HTNode HT[2 * MAXN];
-char HC[MAXN][MAXN];
+char HC[MAXN + 1][MAXCODE];
 int n = 0;
+int treeReady = 0;
 
 // 选取两个权值最小且没有父结点的结点
 void Select(int end, int* s1, int* s2) {
-    *s1 = *s2 = 0;
+    *s1 = 0;
+    *s2 = 0;
 
     for (int i = 1; i <= end; i++) {
         if (HT[i].parent != 0)
@@ -39,14 +43,15 @@ void Select(int end, int* s1, int* s2) {
     }
 }
 
-// 生成每个字符的哈夫曼编码
+// 生成哈夫曼编码
 void CreateCode() {
     for (int i = 1; i <= n; i++) {
-        char temp[MAXN];
+        char temp[MAXCODE];
         int len = 0;
         int c = i;
         int p = HT[c].parent;
 
+        // 从叶子结点向根结点查找
         while (p != 0) {
             if (HT[p].left == c)
                 temp[len++] = '0';
@@ -57,7 +62,7 @@ void CreateCode() {
             p = HT[c].parent;
         }
 
-        // 将从叶子到根得到的编码逆序
+        // 将编码逆序保存
         for (int j = 0; j < len; j++)
             HC[i][j] = temp[len - 1 - j];
 
@@ -65,31 +70,98 @@ void CreateCode() {
     }
 }
 
-// 保存哈夫曼树到文件
-void SaveTree() {
+// 保存哈夫曼树
+int SaveTree() {
     FILE* fp = fopen("hfmTree", "w");
 
     if (fp == NULL) {
-        printf("保存文件失败！\n");
-        return;
+        printf("错误：无法创建hfmTree！\n");
+        return 0;
     }
 
-    fprintf(fp, "%d\n", n);
+    if (fprintf(fp, "%d\n", n) < 0) {
+        fclose(fp);
+        return 0;
+    }
 
     for (int i = 1; i <= 2 * n - 1; i++) {
-        fprintf(fp, "%d %d %d %d %d\n",
+        if (fprintf(fp, "%d %d %d %d %d\n",
             (int)(unsigned char)HT[i].ch,
             HT[i].weight,
             HT[i].parent,
             HT[i].left,
-            HT[i].right);
+            HT[i].right) < 0) {
+            fclose(fp);
+            return 0;
+        }
     }
 
-    fclose(fp);
-    printf("哈夫曼树已保存到 hfmTree\n");
+    if (fclose(fp) != 0) {
+        printf("错误：哈夫曼树保存失败！\n");
+        return 0;
+    }
+
+    printf("哈夫曼树已保存到hfmTree\n");
+    return 1;
 }
 
-// 从文件读取哈夫曼树
+// 检查哈夫曼树结构是否合法
+int CheckTree() {
+    int root = 2 * n - 1;
+    int count[2 * MAXN] = { 0 };
+
+    if (n < 2 || n > MAXN)
+        return 0;
+
+    // 检查叶子结点
+    for (int i = 1; i <= n; i++) {
+        if (HT[i].weight <= 0 ||
+            HT[i].left != 0 ||
+            HT[i].right != 0)
+            return 0;
+
+        for (int j = 1; j < i; j++) {
+            if (HT[i].ch == HT[j].ch)
+                return 0;
+        }
+    }
+
+    // 检查非叶子结点
+    for (int i = n + 1; i <= root; i++) {
+        int l = HT[i].left;
+        int r = HT[i].right;
+
+        if (l < 1 || r < 1 ||
+            l >= i || r >= i || l == r)
+            return 0;
+
+        if (HT[l].parent != i ||
+            HT[r].parent != i)
+            return 0;
+
+        if (HT[i].weight !=
+            HT[l].weight + HT[r].weight)
+            return 0;
+
+        count[l]++;
+        count[r]++;
+    }
+
+    // 检查根结点和父子关系
+    if (HT[root].parent != 0)
+        return 0;
+
+    for (int i = 1; i < root; i++) {
+        if (count[i] != 1 ||
+            HT[i].parent <= i ||
+            HT[i].parent > root)
+            return 0;
+    }
+
+    return 1;
+}
+
+// 从文件加载哈夫曼树
 int LoadTree() {
     FILE* fp = fopen("hfmTree", "r");
     int t, ch;
@@ -103,6 +175,7 @@ int LoadTree() {
         return 0;
     }
 
+    memset(HT, 0, sizeof(HT));
     n = t;
 
     for (int i = 1; i <= 2 * n - 1; i++) {
@@ -111,32 +184,48 @@ int LoadTree() {
             &HT[i].weight,
             &HT[i].parent,
             &HT[i].left,
-            &HT[i].right) != 5) {
+            &HT[i].right) != 5 ||
+            ch < 0 || ch > 255) {
             fclose(fp);
             n = 0;
             return 0;
         }
+
         HT[i].ch = (char)ch;
     }
 
     fclose(fp);
+
+    if (!CheckTree()) {
+        n = 0;
+        return 0;
+    }
+
     CreateCode();
+    treeReady = 1;
+
+    printf("已从hfmTree加载哈夫曼树！\n");
     return 1;
 }
 
-// 初始化并建立哈夫曼树
+// 初始化哈夫曼树
 void Init() {
     int s1, s2;
+    int newN;
 
     printf("请输入字符个数n：");
-    if (scanf("%d", &n) != 1 ||
-        n < 2 || n > MAXN) {
-        printf("字符个数不合法！\n");
-        n = 0;
+
+    if (scanf("%d", &newN) != 1 ||
+        newN < 2 || newN > MAXN) {
+        printf("错误：字符个数应为2~100！\n");
         return;
     }
 
+    // 只有开始有效初始化后才清除旧树
+    n = newN;
+    treeReady = 0;
     memset(HT, 0, sizeof(HT));
+    memset(HC, 0, sizeof(HC));
 
     for (int i = 1; i <= n; i++) {
         printf("请输入第%d个字符及权值：", i);
@@ -145,21 +234,22 @@ void Init() {
             &HT[i].ch,
             &HT[i].weight) != 2 ||
             HT[i].weight <= 0) {
-            printf("输入错误！\n");
+            printf("错误：字符或权值不合法！\n");
             n = 0;
             return;
         }
 
+        // 检查字符是否重复
         for (int j = 1; j < i; j++) {
-            if (HT[j].ch == HT[i].ch) {
-                printf("字符不能重复！\n");
+            if (HT[i].ch == HT[j].ch) {
+                printf("错误：字符不能重复！\n");
                 n = 0;
                 return;
             }
         }
     }
 
-    // 逐步合并两个最小权值结点
+    // 构造哈夫曼树
     for (int i = n + 1; i <= 2 * n - 1; i++) {
         Select(i - 1, &s1, &s2);
 
@@ -173,18 +263,32 @@ void Init() {
             HT[s1].weight + HT[s2].weight;
     }
 
+    if (!CheckTree()) {
+        printf("错误：哈夫曼树构造失败！\n");
+        n = 0;
+        return;
+    }
+
     CreateCode();
-    SaveTree();
+    treeReady = 1;
 
     printf("\n哈夫曼编码表：\n");
+    printf("字符\t权值\t编码\n");
 
-    for (int i = 1; i <= n; i++)
-        printf("%c：%s\n", HT[i].ch, HC[i]);
+    for (int i = 1; i <= n; i++) {
+        printf("%c\t%d\t%s\n",
+            HT[i].ch,
+            HT[i].weight,
+            HC[i]);
+    }
+
+    if (!SaveTree())
+        printf("警告：树已建立，但文件保存失败！\n");
 }
 
-// 检查哈夫曼树是否已建立
+// 检查哈夫曼树是否可用
 int Ready() {
-    if (n >= 2)
+    if (treeReady)
         return 1;
 
     if (LoadTree())
@@ -194,46 +298,61 @@ int Ready() {
     return 0;
 }
 
-// 编码：读取正文文件，输出CodeFile
+// 查找字符对应的结点编号
+int FindChar(int ch) {
+    for (int i = 1; i <= n; i++) {
+        if ((unsigned char)HT[i].ch == ch)
+            return i;
+    }
+
+    return 0;
+}
+
+// 编码
 void Encode() {
     FILE* in;
     FILE* out;
     char filename[100];
-    int ch, i;
-    int ok = 1;
+    int ch, index;
+    long count = 0;
+    long bits = 0;
+    int error = 0;
 
     if (!Ready())
         return;
 
     printf("请输入正文文件名：");
-    scanf("%99s", filename);
 
-    in = fopen(filename, "r");
+    if (scanf("%99s", filename) != 1)
+        return;
+
+    in = fopen(filename, "rb");
 
     if (in == NULL) {
-        printf("正文文件打开失败！\n");
+        printf("错误：正文文件打开失败！\n");
         return;
     }
 
-    // 先检查字符是否都属于字符集
+    // 第一遍：检查正文内容
     while ((ch = fgetc(in)) != EOF) {
-        int found = 0;
+        count++;
 
-        for (i = 1; i <= n; i++) {
-            if ((unsigned char)HT[i].ch == ch) {
-                found = 1;
-                break;
-            }
-        }
-
-        if (!found) {
-            ok = 0;
-            break;
+        if (FindChar(ch) == 0) {
+            printf("错误：第%ld个字符不在字符集中！\n",
+                count);
+            fclose(in);
+            return;
         }
     }
 
-    if (!ok) {
-        printf("正文中存在未定义字符！\n");
+    if (ferror(in)) {
+        printf("错误：正文文件读取失败！\n");
+        fclose(in);
+        return;
+    }
+
+    if (count == 0) {
+        printf("错误：正文文件为空，无法编码！\n");
         fclose(in);
         return;
     }
@@ -243,36 +362,54 @@ void Encode() {
     out = fopen("CodeFile", "w");
 
     if (out == NULL) {
-        printf("CodeFile创建失败！\n");
+        printf("错误：无法创建CodeFile！\n");
         fclose(in);
         return;
     }
 
-    printf("编码结果：");
+    printf("\n编码结果：");
 
+    // 第二遍：正式编码
     while ((ch = fgetc(in)) != EOF) {
-        for (i = 1; i <= n; i++) {
-            if ((unsigned char)HT[i].ch == ch) {
-                printf("%s", HC[i]);
-                fputs(HC[i], out);
-                break;
-            }
+        index = FindChar(ch);
+
+        if (fputs(HC[index], out) == EOF) {
+            error = 1;
+            break;
         }
+
+        printf("%s", HC[index]);
+        bits += (long)strlen(HC[index]);
     }
 
-    printf("\n编码已保存到CodeFile\n");
+    if (ferror(in))
+        error = 1;
 
     fclose(in);
-    fclose(out);
+
+    if (fclose(out) != 0)
+        error = 1;
+
+    if (error) {
+        printf("\n错误：编码文件写入失败！\n");
+        return;
+    }
+
+    printf("\n\n编码成功！\n");
+    printf("原始字符数：%ld\n", count);
+    printf("编码位数：%ld\n", bits);
+    printf("结果已保存到CodeFile\n");
 }
 
-// 译码：读取CodeFile，输出TextFile
+// 译码
 void Decode() {
     FILE* in;
     FILE* out;
     int bit;
     int root, p;
     int valid = 1;
+    int count = 0;
+    int error = 0;
 
     if (!Ready())
         return;
@@ -280,15 +417,17 @@ void Decode() {
     in = fopen("CodeFile", "r");
 
     if (in == NULL) {
-        printf("CodeFile不存在！\n");
+        printf("错误：CodeFile不存在！\n");
         return;
     }
 
-    // 第一遍检查编码是否合法
     root = 2 * n - 1;
     p = root;
 
+    // 第一遍：检查编码是否合法
     while ((bit = fgetc(in)) != EOF) {
+        count++;
+
         if (bit != '0' && bit != '1') {
             valid = 0;
             break;
@@ -299,59 +438,84 @@ void Decode() {
         else
             p = HT[p].right;
 
-        if (p <= 0 || p >= 2 * n) {
+        if (p <= 0 || p > root) {
             valid = 0;
             break;
         }
 
+        // 遇到叶子结点，返回根结点
         if (HT[p].left == 0 &&
             HT[p].right == 0)
             p = root;
     }
 
-    if (p != root)
+    if (ferror(in))
         valid = 0;
 
-    if (!valid) {
-        printf("编码文件不合法或不完整！\n");
+    if (count == 0) {
+        printf("错误：CodeFile为空！\n");
+        fclose(in);
+        return;
+    }
+
+    if (!valid || p != root) {
+        printf("错误：编码不合法或不完整！\n");
         fclose(in);
         return;
     }
 
     rewind(in);
 
-    out = fopen("TextFile", "w");
+    out = fopen("TextFile", "wb");
 
     if (out == NULL) {
-        printf("TextFile创建失败！\n");
+        printf("错误：无法创建TextFile！\n");
         fclose(in);
         return;
     }
 
     p = root;
-    printf("译码结果：");
 
+    printf("\n译码结果：");
+
+    // 第二遍：正式译码
     while ((bit = fgetc(in)) != EOF) {
         if (bit == '0')
             p = HT[p].left;
         else
             p = HT[p].right;
 
-        // 到达叶子结点，输出对应字符
         if (HT[p].left == 0 &&
             HT[p].right == 0) {
+            if (fputc((unsigned char)HT[p].ch,
+                out) == EOF) {
+                error = 1;
+                break;
+            }
+
             printf("%c", HT[p].ch);
-            fputc(HT[p].ch, out);
             p = root;
         }
     }
 
-    printf("\n译码已保存到TextFile\n");
+    if (ferror(in))
+        error = 1;
 
     fclose(in);
-    fclose(out);
+
+    if (fclose(out) != 0)
+        error = 1;
+
+    if (error) {
+        printf("\n错误：译码文件写入失败！\n");
+        return;
+    }
+
+    printf("\n\n译码成功！\n");
+    printf("结果已保存到TextFile\n");
 }
 
+// 主函数
 int main() {
     int choice;
 
@@ -363,21 +527,28 @@ int main() {
         printf("0. 退出\n");
         printf("请选择：");
 
-        if (scanf("%d", &choice) != 1)
+        if (scanf("%d", &choice) != 1) {
+            printf("输入结束或格式错误！\n");
             break;
+        }
 
         switch (choice) {
         case 1:
             Init();
             break;
+
         case 2:
             Encode();
             break;
+
         case 3:
             Decode();
             break;
+
         case 0:
+            printf("程序结束！\n");
             return 0;
+
         default:
             printf("输入错误，请重新选择！\n");
         }

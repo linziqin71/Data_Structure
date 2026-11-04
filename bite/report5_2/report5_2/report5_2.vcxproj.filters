@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="hafu.c">
+    <ClCompile Include="hafu2.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
