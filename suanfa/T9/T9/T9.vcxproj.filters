@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="xianjiao.c">
+    <ClCompile Include="xiangjiao.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
